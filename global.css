@@ -157,6 +157,14 @@ section {
     display: inline-block;
     cursor: pointer;
     border: none;
+    white-space: nowrap; /* Chống xuống hàng */
+}
+
+@media (max-width: 576px) {
+    .btn {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
 }
 
 .btn-primary {
@@ -272,4 +280,57 @@ footer {
     transform: translate(-50%, -50%) scale(1.5);
     border-color: var(--secondary-color);
     background-color: rgba(16, 185, 129, 0.1);
+}
+
+/* ===== Scroll to Top Button ===== */
+.scroll-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    z-index: 500; /* Thấp hơn cursor (9999) để không chặn sự kiện chuột */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(16px) scale(0.85);
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.35s ease;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+}
+
+.scroll-top.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.scroll-top:hover {
+    background: var(--primary-hover);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 12px 28px rgba(99, 102, 241, 0.45);
+}
+
+.scroll-top:active {
+    transform: translateY(0) scale(0.95);
+    transition-duration: 0.1s;
+}
+
+@media (max-width: 768px) {
+    .scroll-top {
+        bottom: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
+    }
 }
