@@ -71,18 +71,81 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // Global Scroll Reveal (needs to run after all components are in DOM)
-    const reveals = document.querySelectorAll('.reveal');
-    const revealOnScroll = () => {
-        for (let i = 0; i < reveals.length; i++) {
-            const windowHeight = window.innerHeight;
-            const elementTop = reveals[i].getBoundingClientRect().top;
-            const elementVisible = 150;
-            if (elementTop < windowHeight - elementVisible) {
-                reveals[i].classList.add('active');
+    // Global Scroll Reveal using Intersection Observer
+    const revealCallback = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                // Optional: stop observing once revealed
+                // observer.unobserve(entry.target);
             }
-        }
+        });
     };
-    window.addEventListener('scroll', revealOnScroll);
-    revealOnScroll(); // Initial check
+
+    const revealObserver = new IntersectionObserver(revealCallback, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    const initReveals = () => {
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach(el => revealObserver.observe(el));
+    };
+
+    initReveals(); // Initial call after components load
+
+    // Custom Cursor Logic
+    const initCustomCursor = () => {
+        const dot = document.querySelector('.cursor-dot');
+        const outline = document.querySelector('.cursor-outline');
+        
+        if (!dot || !outline) return;
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let outlineX = 0;
+        let outlineY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Show cursor on first move
+            dot.style.opacity = '1';
+            outline.style.opacity = '1';
+
+            dot.style.left = mouseX + 'px';
+            dot.style.top = mouseY + 'px';
+        });
+
+        // Smooth outline follow
+        const animateOutline = () => {
+            const distX = mouseX - outlineX;
+            const distY = mouseY - outlineY;
+
+            outlineX = outlineX + distX * 0.15;
+            outlineY = outlineY + distY * 0.15;
+
+            outline.style.left = outlineX + 'px';
+            outline.style.top = outlineY + 'px';
+
+            requestAnimationFrame(animateOutline);
+        };
+        animateOutline();
+
+        // Hover effects using event delegation for dynamic content
+        document.body.addEventListener('mouseover', (e) => {
+            if (e.target.closest('a, button, .btn, .menu-toggle')) {
+                document.body.classList.add('cursor-hover');
+            }
+        });
+
+        document.body.addEventListener('mouseout', (e) => {
+            if (e.target.closest('a, button, .btn, .menu-toggle')) {
+                document.body.classList.remove('cursor-hover');
+            }
+        });
+    };
+
+    initCustomCursor();
 });

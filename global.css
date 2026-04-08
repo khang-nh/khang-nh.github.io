@@ -14,6 +14,89 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Background Stars */
+.stars-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    background-color: #0a0b10; /* Original dark background */
+}
+
+/* Twinkling Static Stars */
+.stars-container::before {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    box-shadow: 
+        10vw 10vh 1px #fff, 20vw 30vh 1px #fff, 30vw 15vh 1px #fff, 40vw 40vh 1px #fff, 
+        50vw 10vh 1px #fff, 65vw 25vh 1px #fff, 75vw 50vh 1px #fff, 85vw 15vh 1px #fff,
+        15vw 60vh 1px #fff, 25vw 80vh 1px #fff, 45vw 70vh 1px #fff, 60vw 90vh 1px #fff,
+        80vw 75vh 1px #fff, 90vw 95vh 1px #fff, 5vw 45vh 1px #fff, 95vw 35vh 1px #fff;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: twinkle 5s infinite alternate;
+}
+
+@keyframes twinkle {
+    from { opacity: 0.1; }
+    to { opacity: 0.5; }
+}
+
+.star {
+    position: absolute;
+    top: -50px;
+    left: -100px;
+    width: 2px;
+    height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5);
+    animation: shooting-star linear infinite;
+    opacity: 0;
+}
+
+.star::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 150px;
+    height: 1px;
+    background: linear-gradient(-90deg, #fff, transparent);
+}
+
+@keyframes shooting-star {
+    0% {
+        transform: rotate(20deg) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: rotate(20deg) translateX(120vw);
+        opacity: 0;
+    }
+}
+
+.star:nth-child(1) { top: 10%; left: -10%; animation-delay: 0s; animation-duration: 3s; }
+.star:nth-child(2) { top: 25%; left: -20%; animation-delay: 4s; animation-duration: 4s; }
+.star:nth-child(3) { top: 40%; left: -5%; animation-delay: 7s; animation-duration: 3.5s; }
+.star:nth-child(4) { top: 5%; left: -15%; animation-delay: 2s; animation-duration: 5s; }
+.star:nth-child(5) { top: 60%; left: -25%; animation-delay: 5s; animation-duration: 4.5s; }
+.star:nth-child(6) { top: 15%; left: -10%; animation-delay: 9s; animation-duration: 4s; }
+.star:nth-child(7) { top: 80%; left: -5%; animation-delay: 1s; animation-duration: 3.2s; }
+.star:nth-child(8) { top: 35%; left: -30%; animation-delay: 3s; animation-duration: 4.8s; }
+
 * {
     margin: 0;
     padding: 0;
@@ -26,7 +109,7 @@ html {
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--bg-dark);
+    background-color: transparent;
     color: var(--text-main);
     line-height: 1.6;
     overflow-x: hidden;
@@ -98,20 +181,95 @@ section {
     transform: translateY(-3px);
 }
 
+/* Reveal Animations */
 .reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease;
+    transition: all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1);
+    will-change: transform, opacity;
+}
+
+.fade-up {
+    transform: translateY(50px);
+}
+
+.fade-left {
+    transform: translateX(-50px);
+}
+
+.fade-right {
+    transform: translateX(50px);
+}
+
+.zoom-in {
+    transform: scale(0.9);
 }
 
 .reveal.active {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(0, 0) scale(1);
 }
+
+/* Delay classes for staggered animations */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
 
 footer {
     padding: 3rem 0;
     background: #050608;
     text-align: center;
     border-top: 1px solid var(--glass-border);
+}
+
+/* Custom Cursor */
+.cursor-dot,
+.cursor-outline {
+    display: none; /* Ẩn mặc định */
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 9999;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+}
+
+/* Chỉ hiển thị và ẩn con trỏ mặc định trên thiết bị có chuột (Desktop) */
+@media (pointer: fine) {
+    .cursor-dot,
+    .cursor-outline {
+        display: block;
+    }
+
+    body, a, button, .btn, .menu-toggle {
+        cursor: none !important;
+    }
+}
+
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary-color);
+}
+
+.cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--primary-color);
+}
+
+/* Hover effect for cursor */
+.cursor-hover .cursor-dot {
+    transform: translate(-50%, -50%) scale(1.5);
+    background-color: var(--secondary-color);
+}
+
+.cursor-hover .cursor-outline {
+    transform: translate(-50%, -50%) scale(1.5);
+    border-color: var(--secondary-color);
+    background-color: rgba(16, 185, 129, 0.1);
 }
