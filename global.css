@@ -157,6 +157,14 @@ section {
     display: inline-block;
     cursor: pointer;
     border: none;
+    white-space: nowrap; /* Chống xuống hàng */
+}
+
+@media (max-width: 576px) {
+    .btn {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
 }
 
 .btn-primary {
