@@ -148,4 +148,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     initCustomCursor();
+
+    // Scroll to Top
+    const scrollTopBtn = document.getElementById('scroll-top');
+    if (scrollTopBtn) {
+        window.addEventListener('scroll', () => {
+            scrollTopBtn.classList.toggle('show', window.scrollY > 400);
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            const startPos = window.pageYOffset;
+            const duration = 900;
+            let startTime = null;
+
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // easeInOutCubic - mượt mà tự nhiên
+                const ease = progress < 0.5
+                    ? 4 * progress * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                window.scrollTo(0, startPos * (1 - ease));
+                if (elapsed < duration) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        });
+    }
 });
