@@ -4,6 +4,10 @@
     gap: 4rem;
 }
 
+.contact-details {
+    margin-top: 2rem;
+}
+
 .detail-item {
     display: flex;
     align-items: center;
@@ -32,7 +36,7 @@
     background: var(--bg-card);
     border: 1px solid var(--glass-border);
     border-radius: 8px;
-    color: white;
+    color: var(--text-main);
     outline: none;
     transition: var(--transition);
 }
@@ -43,4 +47,65 @@
 
 @media (max-width: 992px) {
     .contact-grid { grid-template-columns: 1fr; }
+}
+
+/* Success Popup */
+.success-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.success-popup.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.popup-content {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    transform: translateY(20px) scale(0.9);
+    transition: var(--transition);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.success-popup.show .popup-content {
+    transform: translateY(0) scale(1);
+}
+
+.popup-content i {
+    font-size: 4rem;
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+}
+
+.popup-content h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+
+.popup-content p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.popup-content .btn {
+    width: 100%;
 }

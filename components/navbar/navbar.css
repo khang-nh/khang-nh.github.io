@@ -3,16 +3,16 @@ nav {
     top: 0;
     width: 100%;
     z-index: 1000;
-    padding: 1.5rem 0;
-    transition: var(--transition);
+    padding: 1rem 0;
+    transition: background 0.3s ease, border-bottom 0.3s ease, box-shadow 0.3s ease; /* Chỉ transition hiệu ứng, KHÔNG transition padding/height */
     backdrop-filter: blur(10px);
     background: transparent;
 }
 
 nav.scrolled {
-    padding: 1rem 0;
-    background: rgba(10, 11, 16, 0.9);
+    background: var(--bg-card);
     border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .container-nav {
@@ -50,6 +50,41 @@ nav.scrolled {
     color: var(--primary-color);
 }
 
+.nav-extra {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.theme-toggle {
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: var(--text-main);
+    transition: var(--transition);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+}
+
+.theme-toggle:hover {
+    color: var(--primary-color);
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.theme-toggle .fa-sun { display: none; }
+[data-theme="light"] .theme-toggle .fa-moon { display: none; }
+[data-theme="light"] .theme-toggle .fa-sun { display: block; }
+
 .menu-toggle {
     display: none;
     font-size: 1.5rem;
@@ -83,6 +118,7 @@ nav.scrolled {
         top: 0;
         right: -100%;
         height: 100vh;
+        height: 100dvh;
         width: 260px; /* Thân menu nhỏ hơn */
         background: var(--bg-card);
         flex-direction: column;

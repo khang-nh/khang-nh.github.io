@@ -1,5 +1,5 @@
 :root {
-    /* Colors */
+    /* Colors (Dark Mode Default) */
     --primary-color: #6366f1;
     --primary-hover: #4f46e5;
     --secondary-color: #10b981;
@@ -14,16 +14,129 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+[data-theme="light"] {
+    --bg-dark: #f1f5f9;
+    --bg-card: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --glass: rgba(0, 0, 0, 0.03);
+    --glass-border: rgba(0, 0, 0, 0.09);
+}
+
 /* Background Stars */
 .stars-container {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
+    inset: -20px; /* Bám lấy toàn bộ và tỏa dư ra ngoài 20px để chắc ăn không thấy viền */
     z-index: -1;
     overflow: hidden;
-    background-color: #0a0b10; /* Original dark background */
+    background-color: var(--bg-dark);
+    transition: background-color 0.4s ease;
+}
+
+/* Hide stars in light mode */
+[data-theme="light"] .stars-container::before,
+[data-theme="light"] .stars-container::after,
+[data-theme="light"] .star {
+    display: none;
+}
+
+/* Light mode: subtle dot grid */
+[data-theme="light"] .stars-container {
+    background: radial-gradient(circle at top right, #e2e8f0, #f8fafc 50%);
+}
+
+[data-theme="light"] .stars-container::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(#94a3b8 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.15;
+    mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+/* Background Blobs Styles */
+.bg-blobs {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+    display: none; /* Hide by default */
+}
+
+[data-theme="light"] .bg-blobs {
+    display: block;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px); /* Tăng độ mờ ảo (mesh effect) */
+    opacity: 0.8; /* Tăng độ đậm để nổi bật hơn trên nền trắng */
+    animation: blob-float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+[data-theme="light"] .blob {
+    mix-blend-mode: multiply; /* Hiệu ứng trộn màu rất đẹp cho Light Mode */
+}
+
+.blob-1 {
+    width: 600px;
+    height: 600px;
+    background: rgba(99, 102, 241, 0.25); /* Primary Indigo tươi hơn */
+    top: -150px;
+    right: -100px;
+    animation-duration: 25s;
+}
+
+.blob-2 {
+    width: 550px;
+    height: 550px;
+    background: rgba(16, 185, 129, 0.2); /* Secondary Green */
+    bottom: -150px;
+    left: -100px;
+    animation-delay: -5s;
+    animation-duration: 22s;
+}
+
+.blob-3 {
+    width: 450px;
+    height: 450px;
+    background: rgba(236, 72, 153, 0.2); /* Thêm màu Hồng Pink mộng mơ */
+    top: 30%;
+    left: 20%;
+    animation-delay: -10s;
+    animation-duration: 28s;
+}
+
+.blob-4 {
+    width: 500px;
+    height: 500px;
+    background: rgba(14, 165, 233, 0.25); /* Xanh Sky Blue rực rỡ */
+    top: 50%;
+    right: 15%;
+    animation-delay: -15s;
+    animation-duration: 24s;
+}
+
+.blob-5 {
+    width: 400px;
+    height: 400px;
+    background: rgba(245, 158, 11, 0.15); /* Cam vàng lấp lánh (Amber) */
+    bottom: 10%;
+    left: 40%;
+    animation-delay: -2s;
+    animation-duration: 26s;
+}
+
+@keyframes blob-float {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    25% { transform: translate(50px, -30px) rotate(90deg) scale(1.05); }
+    50% { transform: translate(20px, 60px) rotate(180deg) scale(0.95); }
+    75% { transform: translate(-40px, 20px) rotate(270deg) scale(1.02); }
+    100% { transform: translate(0, 0) rotate(360deg) scale(1); }
 }
 
 /* Twinkling Static Stars */
@@ -103,8 +216,15 @@
     box-sizing: border-box;
 }
 
+html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
@@ -226,7 +346,7 @@ section {
 
 footer {
     padding: 3rem 0;
-    background: #050608;
+    background: var(--bg-card);
     text-align: center;
     border-top: 1px solid var(--glass-border);
 }
